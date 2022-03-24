@@ -1,4 +1,4 @@
-import { mongoose } from "mongoose"
+import mongoose from 'mongoose'
 
 const Schema = mongoose.Schema
 
@@ -18,9 +18,9 @@ const mealSchema = new Schema({
     },
   calories: Number,
   reviews: [reviewSchema],
-  restaurants: {
+  restaurants: [{
     type: Schema.Types.ObjectId, ref: "Restaurant"
-  }
+  }]
 }, {
   timestamps: true
 })
