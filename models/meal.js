@@ -1,6 +1,6 @@
-import { mongoose } from "mongoose";
+import { mongoose } from "mongoose"
 
-const Schema = mongoose.schema
+const Schema = mongoose.Schema
 
 const reviewSchema = new Schema({
   content: String
@@ -13,14 +13,14 @@ const mealSchema = new Schema({
   ingredients: {type: String, required: true},
   instructions: {type: String, required: true},
   prepTime: {type: String},
-  creator: {type: mongoose.Schema.Types.ObjectId, ref: "Profile"},
+  creator: {
+    type: Schema.Types.ObjectId, ref: "Profile"
+    },
   calories: Number,
   reviews: [reviewSchema],
   restaurants: {
     type: Schema.Types.ObjectId, ref: "Restaurant"
   }
-
-
 }, {
   timestamps: true
 })
