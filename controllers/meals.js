@@ -19,10 +19,7 @@ function create(req, res) {
   .then(meal => {
     res.json(meal)
   })
-  .catch(err => {
-    console.log(err)
-    res.redirect("/meals")
-  })
+
 }
 
 function update(req, res) {
