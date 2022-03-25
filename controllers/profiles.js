@@ -9,4 +9,13 @@ function index(req, res) {
   })
 }
 
-export { index }
+
+function show(req, res) {
+  Profile.findById(req.user.profile._id)
+  .populate("meals")
+  .populate("favorites")
+  .then(profile => {res.json(profile)})
+  .catch(err => res.json(err))
+}
+
+export { index, show }
