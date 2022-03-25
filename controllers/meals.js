@@ -11,7 +11,9 @@ function index(req, res) {
 }
 
 function show(req, res) {
-  console.log("This is the show meal function");
+  Meal.findById(req.params.id)
+  .then(meal => res.json(meal))
+  .catch(err => res.json(err))
 }
 
 function create(req, res) {
@@ -19,15 +21,18 @@ function create(req, res) {
   .then(meal => {
     res.json(meal)
   })
-
+  .catch(err => res.json(err))
 }
 
 function update(req, res) {
-  console.log("this is the update function");
+  Meal.findByIdAndUpdate(req.params.id, req.body, {new: true})
+  .then(meal => res.json(meal))
 }
 
 function deleteMeal(req, res) {
-  console.log("this is the delete function");
+  Meal.findByIdAndDelete(req.params.id)
+  .then(meal => res.json(meal))
+  .catch(err => res.json(err))
 }
 
 
