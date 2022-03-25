@@ -13,8 +13,10 @@ router.get('/', mealsCtrl.index)
 /*---------- Protected Routes ----------*/
 router.use(decodeUserFromToken)
 router.post('/', checkAuth, mealsCtrl.create)
+router.post('/:id/reviews', mealsCtrl.createReview)
 router.put('/:id', checkAuth, mealsCtrl.update)
 router.delete('/:id', checkAuth, mealsCtrl.delete)
+
 
 
 

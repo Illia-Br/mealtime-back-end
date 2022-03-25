@@ -40,6 +40,18 @@ function deleteMeal(req, res) {
   .catch(err => res.json(err))
 }
 
+function createReview(req, res) {
+  Meal.findById(req.params.id)
+  .then(meal => {
+    meal.reviews.push(req.body)
+    meal.save()
+    .then(() => {
+      res.json(meal)
+    })
+    .catch(err => res.json(err))
+  })
+}
+
 
 
 
@@ -48,5 +60,6 @@ export {
   show,
   create,
   update,
-  deleteMeal as delete
+  deleteMeal as delete,
+  createReview
 }
