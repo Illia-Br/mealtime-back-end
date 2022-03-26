@@ -1,4 +1,5 @@
 import { Meal } from "../models/meal.js";
+import {v2 as cloudinary} from 'cloudinary'
 
 function index(req, res) {
   Meal.find({})
@@ -20,11 +21,37 @@ function show(req, res) {
 
 function create(req, res) {
   req.body.creator = req.user.profile
-  Meal.create(req.body)
-  .then(meal => {
-    res.json(meal)
-  })
-  .catch(err => res.json(err))
+  if (req.body.picture === 'undefined' || !req.files['picture']) {
+    delete req.body['picture']
+    Meal.create(req.body)
+    .then(meal => {
+      meal.populate('creator')
+      .then(populatedMeal => {
+        res.status(201).json(populatedMeal)
+      })
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json(err)
+    })
+  } else {
+    const imageFile = req.files.picture.path
+    cloudinary.uploader.upload(imageFile, {tags: `${req.body.name}`})
+    .then(image => {
+      req.body.picture = image.url
+      Meal.create(req.body)
+      .then(meal => {
+        meal.populate('creator')
+        .then(populatedMeal => {
+          res.status(201).json(populatedMeal)
+        })
+      })
+      .catch(err => {
+        console.log(err)
+        res.status(500).json(err)
+      })
+    })
+  }
 }
 
 function update(req, res) {
