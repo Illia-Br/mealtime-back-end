@@ -15,9 +15,13 @@ function index(req, res) {
 function show(req, res) {
   Meal.findById(req.params.id)
   .populate("creator")
-  .populate("restaurant")
-  .then(meal => res.json(meal))
-  .catch(err => res.json(err))
+  .populate("restaurants")
+  .then(meal => {
+    res.json(meal)
+  })
+  .catch(err => {
+    res.json(err)
+  })
 }
 
 function create(req, res) {
