@@ -3,6 +3,7 @@ import {v2 as cloudinary} from 'cloudinary'
 
 function index(req, res) {
   Meal.find({})
+  .populate('creator')
   .then (meals => {
     res.json(meals)
   })
