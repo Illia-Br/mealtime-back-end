@@ -2,6 +2,7 @@ import { Restaurant } from '../models/restaurant.js'
 
 function index(req, res) {
   Restaurant.find({})
+  .populate('creator')
   .then(restaurants => res.json(restaurants))
   .catch(err => res.json(err))
 }
