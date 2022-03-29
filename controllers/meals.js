@@ -60,6 +60,7 @@ function create(req, res) {
 }
 
 function update(req, res) {
+  console.log(req.params.id);
   Meal.findByIdAndUpdate(req.params.id, req.body, {new: true})
   .populate("creator")
   .then(meal => res.json(meal))
