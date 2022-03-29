@@ -75,13 +75,16 @@ function deleteMeal(req, res) {
 
 function createReview(req, res) {
   Meal.findById(req.params.id)
+  .populate('creator')
   .then(meal => {
     meal.reviews.push(req.body)
     meal.save()
     .then(() => {
       res.json(meal)
     })
-    .catch(err => res.json(err))
+    .catch(err => {
+      res.json(err)
+    })
   })
 }
 
