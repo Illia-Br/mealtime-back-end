@@ -52,11 +52,51 @@ function show(req, res) {
 }
 
 function update(req, res) {
-  Restaurant.findByIdAndUpdate(req.params.id, req.body, {new: true})
-  .populate("creator")
-  .populate("meals")
-  .then(restaurants => {res.json(restaurants)})
-  .catch(err => res.json(err))
+  if (req.body.picture === 'undefined' || !req.files['picture']) {
+    delete req.body['picture']
+    Restaurant.findByIdAndUpdate(req.params.id, req.body, {new: true})
+    .then(restaurant => {
+      restaurant.populate('creator')
+      .then(populatedRestaurant => {
+        res.status(201).json(populatedRestaurant)
+      })
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json(err)
+    })
+  } else {
+    const imageFile = req.files.picture.path
+    cloudinary.uploader.upload(imageFile, {tags: `${req.body.name}`})
+    .then(image => {
+      console.log(image)
+      req.body.picture = image.url
+      Restaurant.findByIdAndUpdate(req.params.id, req.body, {new: true})
+      .then(restaurant => {
+        restaurant.populate('creator')
+        .then(populatedRestaurant => {
+          res.status(201).json(populatedRestaurant)
+        })
+      })
+      .catch(err => {
+        console.log(err)
+        res.status(500).json(err)
+      })
+    })
+  }
+
+
+
+
+
+
+
+
+  // Restaurant.findByIdAndUpdate(req.params.id, req.body, {new: true})
+  // .populate("creator")
+  // .populate("meals")
+  // .then(restaurants => {res.json(restaurants)})
+  // .catch(err => res.json(err))
   
 }
 
