@@ -60,10 +60,46 @@ function create(req, res) {
 }
 
 function update(req, res) {
-  Meal.findByIdAndUpdate(req.params.id, req.body, {new: true})
-  .populate("creator")
-  .then(meal => res.json(meal))
-  .catch(err => res.json(err))
+  if (req.body.picture === 'undefined' || !req.files['picture']) {
+    delete req.body['picture']
+    Meal.findByIdAndUpdate(req.params.id, req.body, {new: true})
+    .then(meal => {
+      meal.populate('creator')
+      .then(populatedMeal => {
+        res.status(201).json(populatedMeal)
+      })
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json(err)
+    })
+  } else {
+    const imageFile = req.files.picture.path
+    cloudinary.uploader.upload(imageFile, {tags: `${req.body.name}`})
+    .then(image => {
+      console.log(image)
+      req.body.picture = image.url
+      Meal.findByIdAndUpdate(req.params.id, req.body, {new: true})
+      .then(meal => {
+        meal.populate('creator')
+        .then(populatedMeal => {
+          res.status(201).json(populatedMeal)
+        })
+      })
+      .catch(err => {
+        console.log(err)
+        res.status(500).json(err)
+      })
+    })
+  }
+  
+  
+  
+  
+  // Meal.findByIdAndUpdate(req.params.id, req.body, {new: true})
+  // .populate("creator")
+  // .then(meal => res.json(meal))
+  // .catch(err => res.json(err))
 }
 
 function deleteMeal(req, res) {
