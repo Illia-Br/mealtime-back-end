@@ -12,8 +12,7 @@ const restaurantSchema = new Schema ({
   creator: {
     type: Schema.Types.ObjectId, ref: "Profile"
     },
-  picture: String,
-
+  picture: {type: String},
 }, {
   timestamps: true
 })
