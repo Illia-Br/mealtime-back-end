@@ -84,19 +84,6 @@ function update(req, res) {
       })
     })
   }
-
-
-
-
-
-
-
-
-  // Restaurant.findByIdAndUpdate(req.params.id, req.body, {new: true})
-  // .populate("creator")
-  // .populate("meals")
-  // .then(restaurants => {res.json(restaurants)})
-  // .catch(err => res.json(err))
   
 }
 

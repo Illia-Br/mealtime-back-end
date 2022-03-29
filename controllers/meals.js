@@ -92,14 +92,7 @@ function update(req, res) {
       })
     })
   }
-  
-  
-  
-  
-  // Meal.findByIdAndUpdate(req.params.id, req.body, {new: true})
-  // .populate("creator")
-  // .then(meal => res.json(meal))
-  // .catch(err => res.json(err))
+
 }
 
 function deleteMeal(req, res) {
