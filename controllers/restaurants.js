@@ -1,4 +1,5 @@
 import { Restaurant } from '../models/restaurant.js'
+import {v2 as cloudinary} from 'cloudinary'
 
 function index(req, res) {
   Restaurant.find({})
@@ -9,11 +10,37 @@ function index(req, res) {
 
 function create(req, res) {
   req.body.creator = req.user.profile
-  Restaurant.create(req.body)
-  .then(meal => {
-    res.json(meal)
-  })
-  .catch(err => res.json(err))
+  if (req.body.picture === 'undefined' || !req.files['picture']) {
+    delete req.body['picture']
+    Restaurant.create(req.body)
+    .then(restaurant => {
+      restaurant.populate('creator')
+      .then(populatedRestaurant => {
+        res.status(201).json(populatedRestaurant)
+      })
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json(err)
+    })
+  } else {
+    const imageFile = req.files.picture.path
+    cloudinary.uploader.upload(imageFile, {tags: `${req.body.name}`})
+    .then(image => {
+      req.body.picture = image.url
+      Restaurant.create(req.body)
+      .then(restaurant => {
+        restaurant.populate('creator')
+        .then(populatedRestaurant => {
+          res.status(201).json(populatedRestaurant)
+        })
+      })
+      .catch(err => {
+        console.log(err)
+        res.status(500).json(err)
+      })
+    })
+  }
 }
 
 function show(req, res) {
