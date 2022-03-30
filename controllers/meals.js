@@ -18,7 +18,6 @@ function show(req, res) {
   .populate("creator")
   .populate("restaurants")
   .populate({path: 'reviews.creator'})
-  
   .then(meal => {
     console.log(meal)
     res.json(meal)
