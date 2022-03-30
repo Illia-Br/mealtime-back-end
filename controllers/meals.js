@@ -17,7 +17,7 @@ function show(req, res) {
   Meal.findById(req.params.id)
   .populate("creator")
   .populate("restaurants")
-  .populate({path: 'reviews.creator'})
+  .populate({path: 'reviews', populate: {path: 'creator'}}) 
   .populate({path: 'restaurants', populate: {path: 'creator'}})  
   .then(meal => {
     console.log(meal)
@@ -109,11 +109,12 @@ function createReview(req, res) {
   req.body.creator = req.user.profile
   Meal.findById(req.params.id)
   .populate('creator')
+  .populate({path: 'restaurants', populate: {path: 'creator'}})
   .then(meal => {
     meal.reviews.push(req.body)
     meal.save()
     .then(result => {
-      result.populate({path: 'restaurants', populate: {path: 'creator'}})
+      result.populate({path: 'reviews.creator'})
       .then(() => {
         res.json(result)
       })
