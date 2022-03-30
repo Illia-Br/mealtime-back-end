@@ -17,8 +17,10 @@ function show(req, res) {
   Meal.findById(req.params.id)
   .populate("creator")
   .populate("restaurants")
+  .populate({path: 'reviews.creator'})
   .populate({path: 'restaurants', populate: {path: 'creator'}})  
   .then(meal => {
+    console.log(meal)
     res.json(meal)
   })
   .catch(err => {
@@ -104,6 +106,7 @@ function deleteMeal(req, res) {
 }
 
 function createReview(req, res) {
+  req.body.creator = req.user.profile
   Meal.findById(req.params.id)
   .populate('creator')
   .then(meal => {
