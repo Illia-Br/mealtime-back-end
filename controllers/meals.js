@@ -17,6 +17,7 @@ function show(req, res) {
   Meal.findById(req.params.id)
   .populate("creator")
   .populate("restaurants")
+  .populate({path: 'restaurants', populate: {path: 'creator'}})  
   .then(meal => {
     res.json(meal)
   })
@@ -133,6 +134,23 @@ function addRestaurant(req, res) {
   .catch(err => res.json(err))
 }
 
+function removeRestaurant(req, res) {
+  Meal.findById(req.params.mealId)
+  .populate('creator')  
+  .then(meal => {
+      meal.restaurants.remove({_id: req.params.restaurantId})
+      meal.save()
+    .then(result => {
+      result.populate({path: 'restaurants', populate: {path: 'creator'}})
+      .then(() => {
+        console.log(result)
+        res.json(result)
+      })
+    })
+  })
+  .catch(err => res.json(err))
+ } 
+
 
 export {
   index,
@@ -141,5 +159,6 @@ export {
   update,
   deleteMeal as delete,
   createReview,
-  addRestaurant
+  addRestaurant,
+  removeRestaurant
 }
