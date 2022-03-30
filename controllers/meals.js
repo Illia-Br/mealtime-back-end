@@ -109,13 +109,14 @@ function createReview(req, res) {
   .then(meal => {
     meal.reviews.push(req.body)
     meal.save()
-    .then(() => {
-      res.json(meal)
-    })
-    .catch(err => {
-      res.json(err)
+    .then(result => {
+      result.populate({path: 'restaurants', populate: {path: 'creator'}})
+      .then(() => {
+        res.json(result)
+      })
     })
   })
+  .catch(err => res.json(err))
 }
 
 function addRestaurant(req, res) {
@@ -143,7 +144,6 @@ function removeRestaurant(req, res) {
     .then(result => {
       result.populate({path: 'restaurants', populate: {path: 'creator'}})
       .then(() => {
-        console.log(result)
         res.json(result)
       })
     })
