@@ -4,6 +4,7 @@ import {v2 as cloudinary} from 'cloudinary'
 function index(req, res) {
   Meal.find({})
   .populate('creator')
+  .populate("restaurants")
   .then (meals => {
     res.json(meals)
   })
@@ -116,7 +117,21 @@ function createReview(req, res) {
   })
 }
 
-
+function addRestaurant(req, res) {
+  Meal.findById(req.params.id)
+  .populate('creator')
+  .then(meal => {
+    meal.restaurants.push(req.body)
+    meal.save()
+    .then(result => {
+      result.populate('restaurants')
+      .then(() => {
+        res.json(result)
+      })
+    })
+  })
+  .catch(err => res.json(err))
+}
 
 
 export {
@@ -125,5 +140,6 @@ export {
   create,
   update,
   deleteMeal as delete,
-  createReview
+  createReview,
+  addRestaurant
 }
