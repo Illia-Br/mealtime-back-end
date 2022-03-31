@@ -12,5 +12,6 @@ router.use(decodeUserFromToken)
 router.get('/', checkAuth, profilesCtrl.index)
 router.get('/:id', checkAuth, profilesCtrl.show)
 router.post('/:id/:day', checkAuth, profilesCtrl.addRecipeToDay)
+router.delete('/:id/:day/:recipe', checkAuth, profilesCtrl.removeRecipeFromDay)
 
 export { router }
