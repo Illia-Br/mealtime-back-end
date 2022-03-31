@@ -21,7 +21,7 @@ const mealSchema = new Schema({
   creator: {
     type: Schema.Types.ObjectId, ref: "Profile"
     },
-  calories: {type: Number, default: 0},
+  calories: {type: Number},
   reviews: [reviewSchema],
   restaurants: [{
     type: Schema.Types.ObjectId, ref: "Restaurant"
