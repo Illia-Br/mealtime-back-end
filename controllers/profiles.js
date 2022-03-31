@@ -18,4 +18,15 @@ function show(req, res) {
   .catch(err => res.json(err))
 }
 
-export { index, show }
+function addRecipeToDay(req, res) {
+  let day = req.params.day
+  console.log(typeof day);
+  Profile.findById(req.user.profile)
+  .then(profile => {
+    console.log(profile[day]);
+    profile[day].push(req.body)
+    profile.save()
+  })
+}
+
+export { index, show, addRecipeToDay }
