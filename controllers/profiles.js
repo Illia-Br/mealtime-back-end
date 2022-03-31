@@ -11,11 +11,21 @@ function index(req, res) {
 
 
 function show(req, res) {
-  Profile.findById(req.user.profile._id)
-  .populate("meals")
-  .populate("favorites")
+  Profile.findById(req.params.id)
+  .populate("friday")
   .then(profile => {res.json(profile)})
   .catch(err => res.json(err))
 }
 
-export { index, show }
+function addRecipeToDay(req, res) {
+  let day = req.params.day
+  console.log(typeof day);
+  Profile.findById(req.user.profile)
+  .then(profile => {
+    console.log(profile[day]);
+    profile[day].push(req.body)
+    profile.save()
+  })
+}
+
+export { index, show, addRecipeToDay }

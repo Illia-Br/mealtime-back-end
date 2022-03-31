@@ -12,7 +12,7 @@ const profileSchema = new Schema({
   favoriteMeals: [{
     type: Schema.Types.ObjectId, ref: "Meal"
   }],
-  schedule: {
+  
     sunday: [{
       type: Schema.Types.ObjectId, ref: "Meal"
     }], 
@@ -34,7 +34,7 @@ const profileSchema = new Schema({
     saturday: [{ 
       type: Schema.Types.ObjectId, ref: "Meal"
     }],
-  }
+  
 },{
     timestamps: true,
 })
