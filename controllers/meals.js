@@ -20,7 +20,6 @@ function show(req, res) {
   .populate({path: 'reviews', populate: {path: 'creator'}}) 
   .populate({path: 'restaurants', populate: {path: 'creator'}})  
   .then(meal => {
-    console.log(meal)
     res.json(meal)
   })
   .catch(err => {
